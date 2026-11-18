@@ -22,7 +22,9 @@ if(level===2){let metric=Math.floor(index/6)%2,qualitative=index%6<3,direction=i
 for(;;){a=list(true);old=metric===0?median(a):mean(a);candidates=[];for(let x=0;x<=80;x++){let v=metric===0?median([...a,x]):mean([...a,x]);let dir=v<old?0:v>old?2:1;if(dir===direction&&tenth(v))candidates.push(x)}if(candidates.length){extra=candidates[rand(0,candidates.length-1)];b=[...a,extra];now=metric===0?median(b):mean(b);break}}
 let name=metric===0?'Zentralwert':'Mittelwert',correct=qualitative?['sinkt','bleibt gleich','steigt'][direction]:now,options=qualitative?shuffle(['sinkt','bleibt gleich','steigt']):choices(now,[old,now+1,now-1,now+2].filter(x=>x>=0));return{a,extra,old,now,metric,correct,options,title:qualitative?`Wie verändert sich der ${name}?`:`Wie groß ist der ${name} danach?`}}
 let direction=index%3,n,before,after,extra;
-for(;;){n=rand(3,9);before=rand(5,22);after=direction===0?before-rand(1,3):direction===1?before:before+rand(1,6);extra=Math.round(((n+1)*after-n*before)*10)/10;if(extra>=0)break}
+if(index<6){n=index<3?2:3;before=[5,10][rand(0,1)];after=direction===0?before-1:direction===1?before:before+1;extra=(n+1)*after-n*before}
+else if(index<12){n=rand(3,4);before=rand(1,3)*5;after=direction===0?before-1:direction===1?before:before+1;extra=(n+1)*after-n*before}
+else{for(;;){n=rand(3,9);before=rand(5,22);after=direction===0?before-rand(1,3):direction===1?before:before+rand(1,6);extra=Math.round(((n+1)*after-n*before)*10)/10;if(extra>=0)break}}
 return{n,before,after,correct:extra,options:choices(extra,[after-before,after,before,extra+n,extra-n].filter(x=>x>=0)),title:'Welcher Wert ist dazugekommen?'}}
 let level=1,index=0,task,selected=null,checked=false;let counts=[0,0,0],scores=[0,0,0];
 const el=id=>document.getElementById(id);
